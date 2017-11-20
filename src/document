@@ -1,0 +1,24 @@
+基本概念
+1.Java中heap和stack的区别
+stack(栈)的存储效率高于heap(堆)的存储效率。栈中数据和生存期必须在运行前确定了，缺少灵活性。堆可以在程序运行中动态的分配内存。也是正因为这点，存储效率要差于栈的存储效率，但是相对的就灵活很多。堆中的数据会被jvm中的gc管理，自动的回收不在使用的数据。
+Stack中存储的Java数据包括了基本类型（byte, short, int, float, double, long, char, boolean）
+例如 int a = 3; a是指向int的一个引用， 指向3的字面值。因为该值大小固定，生存期也是固定的，那么为了效率放在栈中。
+栈有个特性：栈中的数据可以共享
+例如int a = 3, b = 3;因为a, b的字面值都是3，a = 3的时候，首先在栈中找有没有字面值为3的内存地址，那么就开辟一块字面值为3的内存地址，a指向该地址，然后b = 3，因为数据共享，可以找到字面值为3的地址，那么b 就指向该地址。可用  a == b 来确认a和b是否指向同一个内存地址。
+堆中存储的是Java的对象，例如new A(),就是在堆中开辟了一个内存空间，存放A的对象，因为堆中的数据是不可共享的，那么 执行两次new A(); 在堆中就开辟了2个内存空间。
+在面试的时候，会经常问到
+String str = “abc”;
+String str = new String (“abc”);
+的区别
+其实很好理解，这边引入一个概念，String池，String池就是一个类似堆栈的东西，数据会共享，
+测试下：
+String str1 = “abc”;
+String str2 = “abc”;
+System.out.println(str1 == str2);
+输出为true，说明str1和str2指向同一个内存地址
+String str1 = new String("abc");
+String str2 = new String("abc");
+System.out.println(str1 == str2);
+输出为false，new String(),在堆中开辟了一个新的地址，并用str1指向，str2指向的就是另外一个内存地址了。
+
+2.
