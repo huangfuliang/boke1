@@ -21,4 +21,30 @@ String str2 = new String("abc");
 System.out.println(str1 == str2);
 输出为false，new String(),在堆中开辟了一个新的地址，并用str1指向，str2指向的就是另外一个内存地址了。
 
-2.
+2.基于注解的aop实现
+在spring中aop的实现仅支持xml的配置，我们常见的spring的配置为事务配置为例,配置如下：需要引入spring-aop.jar， spring-aspects.jar
+
+<aop:aspectj-autoproxy proxy-target-class="true"/>声明为spring容器中配置@aspectj切面的bean创建代理，织入切面，proxy-target-class默认为false,表示jdk动态代理，为true的时候，表示为cglib动态代理，如果目标类没有声明接口，不管为true还是false，都为cglib动态代理。
+
+<aop:config>
+    <aop:pointcut id="pc_b" expression="execution(* com.dcmis.app.service.*.*(..))" />
+    <aop:advisor pointcut-ref="pc_b" advice-ref="txAdvice_b" />
+</aop:config>
+
+aop:pointcut（连接点）表明哪些方法需要被aop执行
+
+aop:advisor 定义切面,pointcut-ref定义一个连接点，advice-ref定义一个通知，来增强方法。
+
+注解的aop实现需要在添加两个依赖包（aopalliance-1.0.jar, aspectjweaver.jar）
+在xml中添加<aop:aspectj-autoproxy></aop:aspectj-autoproxy>来扫描注解@aspectj生成切面
+用
+advice的注解有如下几种
+@Before （前置通知：目标方法执行之前执行以下方法体的内容）
+@AfterReturning （返回通知：目标方法正常执行完毕时执行以下代码）
+@After（后置通知：目标方法执行之后执行以下方法体的内容，不管是否发生异常）
+@AfterThrowing(异常通知：目标方法发生异常的时候执行以下代码)
+@Around (环绕通知：目标方法执行前后分别执行一些代码，发生异常的时候执行另外一些代码)
+pointcut配置在advice的后面
+如@Before("execution(* com.hfl.aop.*.*(..))")，说明了为com.hfl.aop包下的方法配置了连接点（pointcut）
+
+
